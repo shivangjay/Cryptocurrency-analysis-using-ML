@@ -6,6 +6,10 @@ from sklearn import datasets, linear_model
 from sklearn.model_selection import train_test_split
 import datetime as dt
 from sklearn.metrics import mean_squared_error, r2_score
+import numerieser
+import faker
+import emoji
+import wget
 files=["BTCUSD.csv","DASHUSD.csv","DOGEUSD.csv","ETHUSD.csv","LTCUSD.csv","XMRUSD.csv"];
 for i in files:
     data = pd.read_csv(i)
@@ -16,13 +20,13 @@ for i in files:
     #Added comment 2
     X = data.iloc[:, 0].values.reshape(-1, 1)  
     Y = data.iloc[:, 1].values.reshape(-1, 1) 
-    x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2)
+    x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.3)
     #Added comment 3
     linear_regressor = LinearRegression()
     linear_regressor.fit(x_train, y_train)
     y_pred = linear_regressor.predict(x_test)
     #Added comment 4
-    plt.scatter(x_test, y_test,  color='green')
+    plt.scatter(x_test, y_test,  color='red')
     plt.plot(x_test, y_pred, color='red', linewidth=4)
     plt.title(i)
     plt.xlabel('Date', fontsize=14)
