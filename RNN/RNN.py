@@ -38,8 +38,7 @@ def prepare_data(df, target_col, window_len=10, zero_base=True, test_size=0.2):
 
     return train_data, test_data, X_train, X_test, y_train, y_test
 
-def build_lstm_model(input_data, output_size, neurons=100, activ_func='linear',
-                     dropout=0.2, loss='mse', optimizer='adam'):
+def build_lstm_model(input_data, output_size, neurons=100, activ_func='linear',dropout=0.2, loss='mse', optimizer='eve'):
     model = Sequential()
     model.add(LSTM(neurons, input_shape=(input_data.shape[1], input_data.shape[2])))
     model.add(Dropout(dropout))
@@ -58,7 +57,7 @@ def line_plot(line1, line2, label1=None, label2=None, title='', lw=2):
     ax.legend(loc='best', fontsize=16);
     plt.show()
 
-files=["BTCUSD.csv","DASHUSD.csv","DOGEUSD.csv","ETHUSD.csv","LTCUSD.csv","XMRUSD.csv"];
+files=["BTCUSD.csv","DASHUSD.csv","DOGEUSD.csv","ETHUSD.csv","LTCUSD.csv","USD.csv"];
 for i in files:
     np.random.seed(42)
     window_len = 5
@@ -76,7 +75,7 @@ for i in files:
     hist['Date']=hist['Date'].map(dt.datetime.toordinal)
     target_col = 'Close'
     train, test = train_test_split(hist, test_size=0.2)
-    line_plot(train[target_col], test[target_col], 'training', 'test', title=i.split('.')[0])
+    line_plot(train[target_col], test[target_col], 'training', 'test', title=i.split('.')[1])
     train, test, X_train, X_test, y_train, y_test = prepare_data(hist, target_col, window_len=window_len, zero_base=zero_base, test_size=test_size)
     model = build_lstm_model(X_train, output_size=1, neurons=lstm_neurons, dropout=dropout, loss=loss,optimizer=optimizer)
     history = model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=1, shuffle=True)
@@ -107,7 +106,7 @@ for i in files:
 
     dropout = 0.2
 
-    optimizer = 'adam'
+    optimizer = 'eve'
 
     hist = pd.read_csv(i)
 
