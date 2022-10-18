@@ -85,4 +85,60 @@ for i in files:
     mean_absolute_error(preds, y_test)
     preds = test[target_col].values[:-window_len] * (preds + 1)
     preds = pd.Series(index=targets.index, data=preds)
+    line_plot(targets, p
+              
+              for i in files:
+
+    np.random.seed(42)
+
+    window_len = 5
+
+    test_size = 0.2
+
+    zero_base = True
+
+    lstm_neurons = 100
+
+    epochs = 20
+
+    batch_size = 32
+
+    loss = 'mse'
+
+    dropout = 0.2
+
+    optimizer = 'adam'
+
+    hist = pd.read_csv(i)
+
+    hist = hist[['Date','Close']]
+
+    hist['Date'] = pd.to_datetime(hist.Date,format='%d/%m/%Y')
+
+    hist['Date']=hist['Date'].map(dt.datetime.toordinal)
+
+    target_col = 'Close'
+
+    train, test = train_test_split(hist, test_size=0.2)
+
+    line_plot(train[target_col], test[target_col], 'training', 'test', title=i.split('.')[0])
+
+    train, test, X_train, X_test, y_train, y_test = prepare_data(hist, target_col, window_len=window_len, zero_base=zero_base, test_size=test_size)
+
+    model = build_lstm_model(X_train, output_size=1, neurons=lstm_neurons, dropout=dropout, loss=loss,optimizer=optimizer)
+
+    history = model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=1, shuffle=True)
+
+    targets = test[target_col][window_len:]
+
+    preds = model.predict(X_test).squeeze()
+
+    mean_absolute_error(preds, y_test)
+
+    preds = test[target_col].values[:-window_len] * (preds + 1)
+
+    preds = pd.Series(index=targets.index, data=preds)
+
     line_plot(targets, preds, 'actual', 'prediction', i.split('.')[0], lw=3)
+
+reds, 'actual', 'prediction', i.split('.')[0], lw=3)
